@@ -1,17 +1,16 @@
-.input-block {
+.select-block {
   position: relative;
 }
 
-.input-block + .input-block,
-.select-block + .input-block {
+.select-block + .select-block {
   margin-top: 1.4rem;
 }
 
-.input-block label {
+.select-block label {
   font-size: 1.4rem;
 }
 
-.input-block input {
+.select-block select {
   width: 100%;
   height: 5.6rem;
   margin-top: 0.8rem;
@@ -23,11 +22,12 @@
   font: 1.6rem Archivo;
 }
 
-.input-block input::placeholder {
-  opacity: 0.6;
+.select-block select option {
+  /* opacity: 0.6; */
+  color: green;
 }
 
-.input-block:focus-within::after {
+.select-block:focus-within::after {
   content: '';
   width: calc(100% - 3.2rem);
   height: 3px;
