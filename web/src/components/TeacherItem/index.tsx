@@ -2,40 +2,57 @@ import React from 'react';
 
 import wppIcon from '../../assets/images/icons/whatsapp.svg';
 
+import api from '../../services/api';
+
 import './styles.css';
 
-const TeacherItem: React.FC = () => {
+interface TeacherItemProps {
+  teacher: Teacher;
+}
+
+export interface Teacher {
+  id: number;
+  subject: string;
+  cost: number;
+  name: string;
+  avatar: string;
+  whatsapp: string;
+  bio: string;
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+  function handleContactWpp() {
+    api
+      .post('connections', { user_id: teacher.id })
+      .catch(() => console.log('Erro ao criar conexão.'));
+  }
+
   return (
     <article className="teacher-item">
       <header>
-        <img
-          src="https://avatars1.githubusercontent.com/u/59981600?s=460&u=732020734a1e6c2357651c48d464af271418f6c0&v=4"
-          alt="Thiago Afonso"
-        />
+        <img src={teacher.avatar} alt={teacher.name} />
 
         <div>
-          <strong>Thiago Afonso</strong>
-          <span>Matemática</span>
+          <strong>{teacher.name}</strong>
+          <span>{teacher.subject}</span>
         </div>
       </header>
 
-      <p>
-        aaaaaaa aaaaaaa bbbbbbb ccccc ddddd
-        <br />
-        <br />
-        sfsdddddddddddddsdffsfcdkjf kewjnskdnknvjdsk fdjksvnvksjvnkv
-        kewjnskdnknvjdskdsjs jkbsajcbsjcsnklc kvldsnklvndslvlnk
-      </p>
+      <p>{teacher.bio}</p>
 
       <footer>
         <p>
           Preço/hora
-          <strong>R$40,00</strong>
+          <strong>R$ {teacher.cost}</strong>
         </p>
-        <button type="button">
+        <a
+          href={`https://wa.me/${teacher.whatsapp}`}
+          target="_blank"
+          onClick={handleContactWpp}
+        >
           <img src={wppIcon} alt="Whatsapp" />
           Entrar em contato
-        </button>
+        </a>
       </footer>
     </article>
   );
