@@ -22,11 +22,6 @@
   font: 1.6rem Archivo;
 }
 
-.select-block select option {
-  /* opacity: 0.6; */
-  color: green;
-}
-
 .select-block:focus-within::after {
   content: '';
   width: calc(100% - 3.2rem);
