@@ -22,7 +22,7 @@ function TeacherForm() {
   const [cost, setCost] = useState('');
 
   const [scheduleItems, setScheduleItems] = useState([
-    { id: 0, week_day: '0', from: '', to: '' },
+    { id: 0, week_day: '', from: '', to: '' },
   ]);
 
   function addScheduleItem() {
@@ -63,11 +63,11 @@ function TeacherForm() {
 
     api
       .post('classes', data)
-      .then(() => alert('Classe criada com sucesso!'))
-      .catch(() => alert('Erro ao criar classe.'))
-      .finally(() => {
+      .then(() => {
+        alert('Classe criada com sucesso!');
         history.push('/');
-      });
+      })
+      .catch(() => alert('Erro ao criar classe.'));
   }
 
   return (
