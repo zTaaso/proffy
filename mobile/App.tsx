@@ -11,24 +11,22 @@ import {
   Poppins_600SemiBold,
 } from '@expo-google-fonts/poppins';
 
-import Landing from './src/pages/Landing';
+import AppStack from './src/routes/AppStack';
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     Archivo_400Regular,
     Archivo_700Bold,
     Poppins_400Regular,
     Poppins_600SemiBold,
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
-    return (
-      <>
-        <Landing />
-        <StatusBar style="light" />
-      </>
-    );
-  }
+  if (!fontsLoaded) return <AppLoading />;
+
+  return (
+    <>
+      <AppStack />
+      <StatusBar style="light" />
+    </>
+  );
 }
