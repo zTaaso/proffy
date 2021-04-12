@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  header: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   title: {
     fontFamily: 'Archivo_700Bold',
     fontSize: 24,
