@@ -18,9 +18,18 @@ class ClassesController {
     const time = filters.time as string;
 
     if (!week_day || !subject || !time) {
-      return res.status(400).json({
-        error: 'Missing filters to search for classes.',
-      });
+      // return res.status(400).json({
+      //   error: 'Missing filters to search for classes.',
+      // });
+
+      const classes = await db('classes').join(
+        'users',
+        'classes.user_id',
+        '=',
+        'users.id'
+      );
+
+      return res.json(classes);
     }
 
     const timeInMinutes = convertHoursToMinutes(time);
@@ -43,7 +52,7 @@ class ClassesController {
     } catch (err) {
       console.log(err);
 
-      return res.json({ error: 'An unexpected error occured.' });
+      return res.json({ error: 'An unexpected error occurred.' });
     }
   }
 
