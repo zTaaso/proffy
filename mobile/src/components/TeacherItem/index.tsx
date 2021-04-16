@@ -1,15 +1,18 @@
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
 import { Image, Linking, Text, View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 import heartOutLineIcon from '../../assets/images/icons/heart-outline.png';
 import unfavoriteIcon from '../../assets/images/icons/unfavorite.png';
 import whatsappIcon from '../../assets/images/icons/whatsapp.png';
+import api from '../../services/api';
 
 import styles from './styles';
 
 interface TeacherItemProps {
   teacher: Teacher;
+  favorite: boolean;
 }
 
 export interface Teacher {
@@ -20,11 +23,50 @@ export interface Teacher {
   avatar: string;
   whatsapp: string;
   bio: string;
+  favorite: boolean;
 }
 
-const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher, favorite }) => {
+  const [isFavorite, setIsFavorite] = useState(favorite);
   function handleContactButton() {
+    api.post('connections', {
+      user_id: teacher.id,
+    });
+
     Linking.openURL(`whatsapp://send?phone=${teacher.whatsapp}`);
+  }
+
+  async function toggleFavorite() {
+    const favorites = await AsyncStorage.getItem('favorites');
+
+    let favoritesArray: Teacher[] = [];
+
+    if (favorites) {
+      favoritesArray = JSON.parse(favorites);
+    }
+
+    if (isFavorite) {
+      // Remove from favorites
+      setIsFavorite(false);
+      const favoriteIndex = favoritesArray.findIndex(
+        (teacherItem: Teacher) => teacherItem.id === teacher.id
+      );
+
+      if (favoriteIndex < 0) return;
+
+      console.log({ favoriteIndex });
+
+      favoritesArray.splice(favoriteIndex, 1);
+      console.log(favoritesArray);
+    } else {
+      // Add to favorites
+      favoritesArray.push(teacher);
+      setIsFavorite(true);
+    }
+
+    console.log({ favoritesArray });
+    // AsyncStorage.clear();
+    AsyncStorage.setItem('favorites', JSON.stringify(favoritesArray));
   }
 
   return (
@@ -52,9 +94,15 @@ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
           <Text style={styles.priceValue}>R${teacher.cost}</Text>
         </Text>
         <View style={styles.buttonsContainer}>
-          <RectButton style={[styles.favoriteButton, styles.favorite]}>
-            {/* <Image source={heartOutLineIcon} /> */}
-            <Image source={unfavoriteIcon} />
+          <RectButton
+            style={[styles.favoriteButton, styles.favorite]}
+            onPress={toggleFavorite}
+          >
+            {isFavorite ? (
+              <Image source={unfavoriteIcon} />
+            ) : (
+              <Image source={heartOutLineIcon} />
+            )}
           </RectButton>
 
           <RectButton
